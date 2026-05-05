@@ -1,0 +1,16 @@
+services:
+  scraper:
+    build: .
+    environment:
+      # SQLite file inside the container — mount a volume to persist it.
+      DATABASE_URL: sqlite:////data/notimaps.db
+      # Comma-separated seed URLs.  Override with real news sites.
+      START_URLS: "https://news.ycombinator.com"
+    volumes:
+      - scraper-data:/data
+    # Override the spider's start URLs at runtime:
+    #   docker compose run scraper scrapy crawl news -s START_URLS="https://example.com/news"
+    command: scrapy crawl news
+
+volumes:
+  scraper-data:
